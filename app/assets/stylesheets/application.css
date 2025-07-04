@@ -1,0 +1,54 @@
+/*
+ * This is a manifest file that'll be compiled into application.css.
+ *
+ * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
+ * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
+ * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
+ * depending on specificity.
+ *
+ * Consider organizing styles into separate files for maintainability.
+ */
+
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700,900');
+
+body {
+  font-family: 'Lato', Arial, sans-serif;
+  background: #f7f8fa;
+}
+
+.btn-amenitill {
+  background-color: #6a9cff;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  transition: background 0.2s;
+}
+.btn-amenitill:hover {
+  background-color: #4a7edc;
+  color: #fff;
+}
+
+.card {
+  border-radius: 10px;
+}
+
+.badge {
+  font-size: 1em;
+  font-weight: 500;
+}
+
+.alert-primary {
+  background-color: #e3edff;
+  color: #1a2a4a;
+  border: none;
+}
+
+.display-4 {
+  font-size: 2.8rem;
+  font-weight: 700;
+}
+
+/* Espaçamento para o header */
+header {
+  margin-bottom: 2rem;
+}
