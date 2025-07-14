@@ -26,20 +26,27 @@
             </div>
             <div class="flex-grow-1">
               <h6 class="mb-2 fw-bold"><%= item.product.name %></h6>
-              <small class="text-muted">
-                <i class="bi bi-hash me-2"></i>Quantidade: <%= item.quantity %>
+              <small class="text-muted d-flex align-items-center gap-2">
+                <i class="bi bi-hash me-2"></i>Quantidade:
+                <form class="update-quantity-form d-flex align-items-center ms-2" action="<%= update_item_cart_path %>" method="post" data-product-id="<%= item.product_id %>" style="display:inline;">
+                  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                  <input type="hidden" name="product_id" value="<%= item.product_id %>">
+                  <button type="button" class="btn btn-outline-secondary btn-sm btn-qty-minus px-2" tabindex="-1"><i class="bi bi-dash"></i></button>
+                  <input type="number" name="quantity" value="<%= item.quantity %>" min="1" class="form-control form-control-sm text-center mx-1 input-qty" style="width: 45px;" autocomplete="off">
+                  <button type="button" class="btn btn-outline-secondary btn-sm btn-qty-plus px-2" tabindex="-1"><i class="bi bi-plus"></i></button>
+                </form>
               </small>
             </div>
           </div>
           <div class="col-md-3 text-md-end">
-            <div class="subtotal">
+            <div class="d-flex align-items-center justify-content-end gap-2">
+              <%= button_to remove_item_cart_path(product_id: item.product_id), method: :delete, class: 'btn btn-remove', data: { turbo: false } do %>
+                <i class="bi bi-trash me-2"></i> Remover
+              <% end %>
+            </div>
+            <div class="subtotal mt-2">
               Subtotal: R$ <%= '%.2f' % item.subtotal %>
             </div>
-          </div>
-          <div class="col-md-3 text-md-end">
-            <%= button_to remove_item_cart_path(product_id: item.product_id), method: :delete, class: 'btn btn-remove', data: { turbo: false } do %>
-              <i class="bi bi-trash me-2"></i> Remover
-            <% end %>
           </div>
         </div>
       </div>

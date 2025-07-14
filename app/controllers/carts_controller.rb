@@ -21,7 +21,7 @@ class CartsController < ApplicationController
     item = @cart.cart_items.find_by(product_id: params[:product_id])
     item.destroy if item
     if request.xhr? || request.format.json?
-      head :ok
+      render json: { success: true, message: 'Produto removido do carrinho.' }
     else
       redirect_to root_path, notice: 'Produto removido do carrinho.'
     end
@@ -30,9 +30,31 @@ class CartsController < ApplicationController
   def empty_cart
     @cart.cart_items.destroy_all
     if request.xhr? || request.format.json?
-      head :ok
+      render json: { success: true, message: 'Carrinho esvaziado.' }
     else
       redirect_to root_path, notice: 'Carrinho esvaziado.'
+    end
+  end
+
+  def update_item
+    item = @cart.cart_items.find_by(product_id: params[:product_id])
+    if item && params[:quantity].to_i > 0
+      item.update(quantity: params[:quantity].to_i)
+      message = 'Quantidade atualizada.'
+      success = true
+    elsif item && params[:quantity].to_i <= 0
+      item.destroy
+      message = 'Produto removido do carrinho.'
+      success = true
+    else
+      message = 'Item não encontrado.'
+      success = false
+    end
+
+    if request.xhr? || request.format.json?
+      render json: { success: success, message: message }
+    else
+      redirect_to root_path, notice: message
     end
   end
 

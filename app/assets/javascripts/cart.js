@@ -160,6 +160,71 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
   });
+
+  // Atualizar quantidade do item no carrinho
+  document.addEventListener('click', function(e) {
+    // Botão +
+    if (e.target.closest('.btn-qty-plus')) {
+      const form = e.target.closest('form.update-quantity-form');
+      if (!form) return;
+      const input = form.querySelector('input.input-qty');
+      input.value = parseInt(input.value) + 1;
+      triggerQuantityUpdate(form, input.value);
+    }
+    // Botão -
+    if (e.target.closest('.btn-qty-minus')) {
+      const form = e.target.closest('form.update-quantity-form');
+      if (!form) return;
+      const input = form.querySelector('input.input-qty');
+      if (parseInt(input.value) > 1) {
+        input.value = parseInt(input.value) - 1;
+        triggerQuantityUpdate(form, input.value);
+      } else {
+        // Se for 1 e clicar em -, remove o item
+        input.value = 0;
+        triggerQuantityUpdate(form, 0);
+      }
+    }
+  });
+
+  // Atualizar ao digitar manualmente
+  document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('input-qty')) {
+      const form = e.target.closest('form.update-quantity-form');
+      if (!form) return;
+      let value = parseInt(e.target.value);
+      if (isNaN(value) || value < 1) value = 1;
+      e.target.value = value;
+      triggerQuantityUpdate(form, value);
+    }
+  });
+
+  function triggerQuantityUpdate(form, quantity) {
+    const productId = form.dataset.productId;
+    const formData = new FormData(form);
+    formData.set('quantity', quantity);
+    formData.set('product_id', productId);
+    fetch(form.action, {
+      method: 'PATCH',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        showNotification(data.message, 'success');
+        updateCart();
+      } else {
+        showNotification('Erro ao atualizar quantidade', 'danger');
+      }
+    })
+    .catch(error => {
+      showNotification('Erro ao atualizar quantidade', 'danger');
+    });
+  }
 });
 
 // Adicionar estilos CSS para as animações

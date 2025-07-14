@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     post 'add_item', to: 'carts#add_item'
     delete 'remove_item', to: 'carts#remove_item'
     delete 'empty_cart', to: 'carts#empty_cart'
+    patch 'update_item', to: 'carts#update_item'
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
