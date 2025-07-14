@@ -1,34 +1,59 @@
-<h3>Your Cart</h3>
+<div class="cart-header d-flex justify-content-between align-items-center">
+  <h3 class="mb-0">
+    <i class="bi bi-cart3 me-3"></i> Seu Carrinho
+  </h3>
+  <% if cart.cart_items.any? %>
+    <%= button_to empty_cart_cart_path, method: :delete, class: 'btn btn-empty', data: { confirm: 'Tem certeza que quer esvaziar o carrinho?', turbo: false } do %>
+      <i class="bi bi-trash me-2"></i> Esvaziar Carrinho
+    <% end %>
+  <% end %>
+</div>
+
 <% if cart.cart_items.any? %>
-  <div class="mb-2 text-end">
-    <%= button_to '🗑️ Empty Cart', empty_cart_cart_path, method: :delete, class: 'btn btn-warning btn-sm', data: { confirm: 'Are you sure?' } %>
-  </div>
-  <div class="list-group mb-3">
+  <div class="cart-items">
     <% cart.cart_items.includes(:product).each do |item| %>
-      <div class="list-group-item d-flex justify-content-between align-items-center">
-        <div>
-          <strong>
-            <% if item.product.name.downcase.include?('tea') %>
-              <i class="fa fa-glass"></i>
-            <% elsif item.product.name.downcase.include?('coffee') %>
-              <i class="fa fa-coffee"></i>
-            <% else %>
-              <i class="fa fa-heart-o"></i>
+      <div class="cart-item">
+        <div class="row align-items-center">
+          <div class="col-md-6 d-flex align-items-center">
+            <div class="product-icon me-3">
+              <% if item.product.name.downcase.include?('tea') %>
+                <i class="bi bi-cup-straw text-success"></i>
+              <% elsif item.product.name.downcase.include?('coffee') %>
+                <i class="bi bi-cup-hot text-warning"></i>
+              <% else %>
+                <i class="bi bi-heart-fill text-danger"></i>
+              <% end %>
+            </div>
+            <div class="flex-grow-1">
+              <h6 class="mb-2 fw-bold"><%= item.product.name %></h6>
+              <small class="text-muted">
+                <i class="bi bi-hash me-2"></i>Quantidade: <%= item.quantity %>
+              </small>
+            </div>
+          </div>
+          <div class="col-md-3 text-md-end">
+            <div class="subtotal">
+              Subtotal: R$ <%= '%.2f' % item.subtotal %>
+            </div>
+          </div>
+          <div class="col-md-3 text-md-end">
+            <%= button_to remove_item_cart_path(product_id: item.product_id), method: :delete, class: 'btn btn-remove', data: { turbo: false } do %>
+              <i class="bi bi-trash me-2"></i> Remover
             <% end %>
-            <%= item.product.name %>
-          </strong>
-          <div style="font-size: 0.95em;">Quantity: <%= item.quantity %></div>
-        </div>
-        <div class="text-end">
-          <div>Subtotal: &euro;<%= '%.2f' % item.subtotal %></div>
-          <%= button_to 'Remove', remove_item_cart_path(product_id: item.product_id), method: :delete, class: 'btn btn-outline-danger btn-sm mt-1' %>
+          </div>
         </div>
       </div>
     <% end %>
   </div>
-  <div class="alert alert-primary text-center" style="font-size: 1.2em; font-weight: bold;">
-    Total: &euro;<%= '%.2f' % cart.total %>
+
+  <div class="cart-total mt-4">
+    <i class="bi bi-calculator me-3"></i>
+    Total: R$ <%= '%.2f' % cart.total %>
   </div>
 <% else %>
-  <div class="alert alert-info">Your cart is empty.</div>
+  <div class="text-center py-5">
+    <i class="bi bi-cart-x text-muted" style="font-size: 4rem; opacity: 0.5;"></i>
+    <h5 class="text-muted mt-4 mb-3">Seu carrinho está vazio</h5>
+    <p class="text-muted mb-0">Adicione alguns produtos para começar suas compras!</p>
+  </div>
 <% end %>

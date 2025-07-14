@@ -2610,178 +2610,73 @@
     <!-- app/views/carts/index.html.erb -->
 
 <div class="container py-4">
-  <!-- App Header: Contains the app logo and name -->
-  <header class="d-flex justify-content-center align-items-center mb-4">
-    <h1 class="display-4 fw-bold text-center" style="color: #5C8EF1;">
-      <i class="bi bi-receipt"></i> SALE Market
+  <!-- Header do Mercadinho -->
+  <div class="market-header text-center">
+    <h1>
+      <i class="bi bi-shop me-3"></i> Mini Market
     </h1>
-  </header>
-
-  <!-- Section: List of available products -->
-  <h2 class="h5 text-secondary mb-3">Available Products</h2>
-  <div class="row g-3">
-      <div class="col-12 col-sm-6 col-lg-4">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body d-flex flex-column">
-
-            <!-- Promo badge based on product code: Displays a badge with a special offer if the product code matches -->
-              <span class="badge mb-2" style="background-color: #C2F4B9; color: #212529;">
-                <i class="bi bi-gift me-1"></i> Buy 1 Get 1 Free
-              </span>
-
-            <!-- Product title and price: Displays the product name and price -->
-            <div class="d-flex justify-content-between align-items-center mb-3 mt-1">
-              <span class="text-dark d-flex align-items-center">
-                <i class="bi bi-cup-straw me-2 text-secondary fs-5"></i>
-                Green Tea
-              </span>
-              <span class="text-muted">€3.11</span>
-            </div>
-
-            <!-- Add to cart button: Button to add the product to the cart -->
-            <form class="button_to" method="post" action="/add_to_cart?code=GR1"><button class="btn btn-amenitill btn-sm w-100 mt-auto" type="submit">
-              <i class="bi bi-cart-plus me-1"></i> Add to Cart
-</button><input type="hidden" name="authenticity_token" value="1T17OcbnfMX6EYkFUhrRy9EICVNRKXhO1sP_C3Vrk1eR8aWdnCM-IiE0Zd2GF5SOLp3VKf_ox7xpsQFDzM4dag" autocomplete="off"></form>          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-4">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body d-flex flex-column">
-
-            <!-- Promo badge based on product code: Displays a badge with a special offer if the product code matches -->
-              <span class="badge mb-2" style="background-color: #C2F4B9; color: #212529;">
-                <i class="bi bi-box2-heart me-1"></i> €4.50 each on 3+
-              </span>
-
-            <!-- Product title and price: Displays the product name and price -->
-            <div class="d-flex justify-content-between align-items-center mb-3 mt-1">
-              <span class="text-dark d-flex align-items-center">
-                <i class="bi bi-heart me-2 text-secondary fs-5"></i>
-                Strawberries
-              </span>
-              <span class="text-muted">€5.00</span>
-            </div>
-
-            <!-- Add to cart button: Button to add the product to the cart -->
-            <form class="button_to" method="post" action="/add_to_cart?code=SR1"><button class="btn btn-amenitill btn-sm w-100 mt-auto" type="submit">
-              <i class="bi bi-cart-plus me-1"></i> Add to Cart
-</button><input type="hidden" name="authenticity_token" value="QX8EVxXWsaEFVhmpA6rZagQYIPYFQJAM9IPEsH8Z3uMFs9rzTxLzRt5z9XHXp5wv-438jKuBL_5L8Tr4xrxQ3g" autocomplete="off"></form>          </div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-4">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body d-flex flex-column">
-
-            <!-- Promo badge based on product code: Displays a badge with a special offer if the product code matches -->
-              <span class="badge mb-2" style="background-color: #C2F4B9; color: #212529;">
-                <i class="bi bi-cup-hot me-1"></i> 33% off on 3+
-              </span>
-
-            <!-- Product title and price: Displays the product name and price -->
-            <div class="d-flex justify-content-between align-items-center mb-3 mt-1">
-              <span class="text-dark d-flex align-items-center">
-                <i class="bi bi-cup-hot me-2 text-secondary fs-5"></i>
-                Coffee
-              </span>
-              <span class="text-muted">€11.23</span>
-            </div>
-
-            <!-- Add to cart button: Button to add the product to the cart -->
-            <form class="button_to" method="post" action="/add_to_cart?code=CF1"><button class="btn btn-amenitill btn-sm w-100 mt-auto" type="submit">
-              <i class="bi bi-cart-plus me-1"></i> Add to Cart
-</button><input type="hidden" name="authenticity_token" value="Bin3HrevzS5mMa8V_DAWXt7VSxM0rA2h07bdcFkgavBC5Sm67WuPyb0UQ80oPVMbIUCXaZptslNsxCM44IXkzQ" autocomplete="off"></form>          </div>
-        </div>
-      </div>
+    <div class="subtitle">
+      <i class="bi bi-heart-fill me-2"></i> Produtos frescos e promoções imperdíveis!
+    </div>
   </div>
 
-  <!-- Section: Cart content wrapped for Turbo Stream: Renders the cart partial with the cart items and total -->
-  <div id="cart" class="mt-5">
-    <!-- Partial: _cart.html.erb -->
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h2 class="h5 text-secondary m-0">Your Cart</h2>
+  <!-- Seção de Produtos -->
+  <div class="products-section">
+    <h2><i class="bi bi-basket me-2"></i> Nossos Produtos</h2>
+    <div class="row g-4">
+      <% @products.each do |product| %>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="card product-card h-100">
+            <div class="card-body d-flex flex-column">
+              <!-- Badge de Promoção -->
+              <% if product.promotion_type == 'bogo' %>
+                <span class="badge promo-badge mb-3">
+                  <i class="bi bi-gift-fill me-2"></i> Compre 1 Leve 2
+                </span>
+              <% elsif product.promotion_type == 'bulk_price' %>
+                <span class="badge promo-badge mb-3">
+                  <i class="bi bi-tags-fill me-2"></i> R$ <%= product.promotion_value %> cada em 3+
+                </span>
+              <% elsif product.promotion_type == 'bulk_discount' %>
+                <span class="badge promo-badge mb-3">
+                  <i class="bi bi-percent me-2"></i> 33% off em 3+
+                </span>
+              <% end %>
 
-    <form class="button_to" method="post" action="/empty_cart"><button class="btn btn-warning btn-sm" style="background-color: #F3D77F; border-color: #F3D77F;" type="submit">
-      <i class="bi bi-x-circle me-1"></i> Empty Cart
-</button><input type="hidden" name="authenticity_token" value="iyheQyh08KbyBrN4L2DU4vIG9ONlSqa0iz-etW5g3RQc82Iltk_L-jBM5dcwElIysLEHnXuPu_GmFGmwtlk2nA" autocomplete="off"></form></div>
-
-<div class="card shadow-sm">
-  <div class="card-body">
-      <ul class="list-group mb-3">
-          <li class="list-group-item">
-            <div class="row align-items-center">
-              <div class="col-6 col-md-6 d-flex align-items-start">
-                <i class="bi bi-cup-straw me-2 text-secondary fs-5 mt-1"></i>
-                <div>
-                  <strong>Green Tea</strong><br>
-                  <small class="text-muted">Quantity: 1</small>
+              <!-- Nome e Ícone do Produto -->
+              <div class="d-flex align-items-center mb-4">
+                <div class="product-icon">
+                  <% if product.name.downcase.include?('tea') %>
+                    <i class="bi bi-cup-straw text-success"></i>
+                  <% elsif product.name.downcase.include?('coffee') %>
+                    <i class="bi bi-cup-hot text-warning"></i>
+                  <% else %>
+                    <i class="bi bi-heart-fill text-danger"></i>
+                  <% end %>
+                </div>
+                <div class="flex-grow-1">
+                  <h5 class="mb-2 fw-bold"><%= product.name %></h5>
+                  <span class="price">R$ <%= '%.2f' % product.price %></span>
                 </div>
               </div>
-              <div class="col-6 col-md-4 text-end">
-                <p class="mb-1">Subtotal: €3.11</p>
-              </div>
-              <div class="col-md-2 text-end d-none d-md-block">
-                <form class="button_to" method="post" action="/remove_from_cart?code=GR1"><button class="btn btn-outline-danger btn-sm" type="submit">
-                  <i class="bi bi-trash me-1"></i> Remove
-</button><input type="hidden" name="authenticity_token" value="iynKkmMJ6g5byY-sN9jAVhX7IxA1FdbaXkL3wgUv5mkxAZPEVRINK5cMIa9esNSGPirrwluw3-31sbmXtHxOqQ" autocomplete="off"></form>              </div>
-              <div class="col-12 mt-2 d-md-none text-end">
-                <form class="button_to" method="post" action="/remove_from_cart?code=GR1"><button class="btn btn-outline-danger btn-sm w-100" type="submit">
-                  <i class="bi bi-trash me-1"></i> Remove
-</button><input type="hidden" name="authenticity_token" value="xs_5BbYZGa4lcIRuAlQDqd1mqI0h7sZWvO-yqYQd2k9856BTgAL-i-m1Km1rPBd59rdgX09Lz2EXHPz8NU5yjw" autocomplete="off"></form>              </div>
-            </div>
-          </li>
-          <li class="list-group-item">
-            <div class="row align-items-center">
-              <div class="col-6 col-md-6 d-flex align-items-start">
-                <i class="bi bi-heart me-2 text-secondary fs-5 mt-1"></i>
-                <div>
-                  <strong>Strawberries</strong><br>
-                  <small class="text-muted">Quantity: 2</small>
-                </div>
-              </div>
-              <div class="col-6 col-md-4 text-end">
-                <p class="mb-1">Subtotal: €10.00</p>
-              </div>
-              <div class="col-md-2 text-end d-none d-md-block">
-                <form class="button_to" method="post" action="/remove_from_cart?code=SR1"><button class="btn btn-outline-danger btn-sm" type="submit">
-                  <i class="bi bi-trash me-1"></i> Remove
-</button><input type="hidden" name="authenticity_token" value="sLcrFvOUVeaYghApcH0vDQ4WCBcJJSuBCqDFfZTTACIKn3JAxY-yw1RHvioZFTvdJcfAxWeAIrahU4soJYCo4g" autocomplete="off"></form>              </div>
-              <div class="col-12 mt-2 d-md-none text-end">
-                <form class="button_to" method="post" action="/remove_from_cart?code=SR1"><button class="btn btn-outline-danger btn-sm w-100" type="submit">
-                  <i class="bi bi-trash me-1"></i> Remove
-</button><input type="hidden" name="authenticity_token" value="_rGvGMYVIIdbiaFTT0C8v8L-kxwC73VPi-xqQq2p2r5EmfZO8A7HopdMD1AmKKhv6S9bzmxKfHggHyQXHPpyfg" autocomplete="off"></form>              </div>
-            </div>
-          </li>
-          <li class="list-group-item">
-            <div class="row align-items-center">
-              <div class="col-6 col-md-6 d-flex align-items-start">
-                <i class="bi bi-cup-hot me-2 text-secondary fs-5 mt-1"></i>
-                <div>
-                  <strong>Coffee</strong><br>
-                  <small class="text-muted">Quantity: 1</small>
-                </div>
-              </div>
-              <div class="col-6 col-md-4 text-end">
-                <p class="mb-1">Subtotal: €11.23</p>
-              </div>
-              <div class="col-md-2 text-end d-none d-md-block">
-                <form class="button_to" method="post" action="/remove_from_cart?code=CF1"><button class="btn btn-outline-danger btn-sm" type="submit">
-                  <i class="bi bi-trash me-1"></i> Remove
-</button><input type="hidden" name="authenticity_token" value="sQmkvgBFpDtxnhAoiLkVHNCLGYUkAdgN_bhbc2eO0E0LIf3oNl5DHr1bvivh0QHM-1rRV0qk0TpWSxUm1t14jQ" autocomplete="off"></form>              </div>
-              <div class="col-12 mt-2 d-md-none text-end">
-                <form class="button_to" method="post" action="/remove_from_cart?code=CF1"><button class="btn btn-outline-danger btn-sm w-100" type="submit">
-                  <i class="bi bi-trash me-1"></i> Remove
-</button><input type="hidden" name="authenticity_token" value="FQvZXAhAoHD2iJboj1k9hGzO7PYu_9pPlFn5S9VP7g6vI4AKPltHVTpNOOvmMSlURx8kJEBa03g_qrceZBxGzg" autocomplete="off"></form>              </div>
-            </div>
-          </li>
-      </ul>
 
-      <!-- Cart total -->
-      <div class="alert alert-primary fw-bold text-center">
-        Total: €24.34
-      </div>
+              <!-- Botão Adicionar ao Carrinho -->
+              <%= form_with url: add_item_cart_path, method: :post, local: true do |f| %>
+                <%= hidden_field_tag :product_id, product.id %>
+                <button class="btn btn-market w-100 mt-auto" type="submit">
+                  <i class="bi bi-cart-plus me-2"></i> Adicionar ao Carrinho
+                </button>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
   </div>
-</div>
 
+  <!-- Seção do Carrinho -->
+  <div class="cart-section">
+    <%= render partial: 'carts/cart', locals: { cart: @cart } %>
   </div>
 </div>
 

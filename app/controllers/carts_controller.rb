@@ -10,18 +10,30 @@ class CartsController < ApplicationController
     item.quantity ||= 0
     item.quantity += params[:quantity].to_i > 0 ? params[:quantity].to_i : 1
     item.save!
-    redirect_to root_path, notice: 'Produto adicionado ao carrinho.'
+    if request.xhr? || request.format.json?
+      head :ok
+    else
+      redirect_to root_path, notice: 'Produto adicionado ao carrinho.'
+    end
   end
 
   def remove_item
     item = @cart.cart_items.find_by(product_id: params[:product_id])
     item.destroy if item
-    redirect_to cart_path, notice: 'Produto removido do carrinho.'
+    if request.xhr? || request.format.json?
+      head :ok
+    else
+      redirect_to root_path, notice: 'Produto removido do carrinho.'
+    end
   end
 
   def empty_cart
     @cart.cart_items.destroy_all
-    redirect_to cart_path, notice: 'Carrinho esvaziado.'
+    if request.xhr? || request.format.json?
+      head :ok
+    else
+      redirect_to root_path, notice: 'Carrinho esvaziado.'
+    end
   end
 
   private

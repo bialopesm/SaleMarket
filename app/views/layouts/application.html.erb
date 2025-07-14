@@ -26,20 +26,86 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
       body { background: #f7f8fa; }
+
+      .notification-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        max-width: 400px;
+      }
+
+      .notification {
+        margin-bottom: 10px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        animation: slideIn 0.3s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
     </style>
   </head>
 
   <body>
-    <div class="container py-4">
+    <!-- Container para notificações -->
+    <div class="notification-container">
       <% if notice %>
-        <div class="alert alert-success"><%= notice %></div>
+        <div class="alert alert-success notification">
+          <i class="bi bi-check-circle me-2"></i>
+          <%= notice %>
+        </div>
       <% end %>
       <% if alert %>
-        <div class="alert alert-danger"><%= alert %></div>
+        <div class="alert alert-danger notification">
+          <i class="bi bi-exclamation-circle me-2"></i>
+          <%= alert %>
+        </div>
       <% end %>
+    </div>
+
+    <div class="container py-4">
       <%= yield %>
     </div>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/cart.js"></script>
+    <!-- Auto-hide notifications -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const notifications = document.querySelectorAll('.notification');
+        notifications.forEach(function(notification) {
+          setTimeout(function() {
+            notification.style.animation = 'slideOut 0.3s ease-in';
+            setTimeout(function() {
+              if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+              }
+            }, 300);
+          }, 3000);
+        });
+      });
+    </script>
+
+    <style>
+      @keyframes slideOut {
+        from {
+          transform: translateX(0);
+          opacity: 1;
+        }
+        to {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+      }
+    </style>
   </body>
 </html>
